@@ -34,15 +34,15 @@
     "MinSize": {
       "Description": "The minimum number of instances",
       "Type": "Number",
-      "Default": 1,
-      "MinValue": 1,
+      "Default": 2,
+      "MinValue": 2,
       "ConstraintDescription": "must be a number"
     },
     "MaxSize": {
       "Description": "The maximum number of instances",
       "Type": "Number",
-      "Default": 1,
-      "MinValue": 1,
+      "Default": 2,
+      "MinValue": 2,
       "ConstraintDescription": "must be a number"
     }
   },
