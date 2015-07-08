@@ -361,19 +361,19 @@
               "echo '* hard nofile 100000' | tee -a /etc/security/limits.conf\n",
               "echo '* soft nofile 100000' | tee -a /etc/security/limits.conf\n",
               "ulimit -n 100000\n",
-              
+
               "mkdir /www\n",
               "mkdir /www/origin\n",
               "mkdir ~/.aws\n",
-              
+
               "echo '[default]' > ~/.aws/credentials\n",
               "echo 'aws_access_key_id=", { "Ref": "AWSAccessKeyId" },"' >> ~/.aws/credentials\n",
               "echo 'aws_secret_access_key=", { "Ref": "AWSSecretAccessKeyId" },"' >> ~/.aws/credentials\n",
-              
+
               "aws s3 sync s3://", {
                 "Ref": "WebSiteName"
               }, "/ /www/origin --delete\n",
- 
+
               "echo '[general]' > /etc/awslogs/awslogs.conf\n",
               "echo 'state_file = /etc/awslogs/agent-state' >> /etc/awslogs/awslogs.conf\n",
               "echo '[/var/log/nginx/access.log]' >> /etc/awslogs/awslogs.conf\n",
@@ -390,22 +390,23 @@
               "echo 'log_stream_name = nginx-errors' >> /etc/awslogs/awslogs.conf\n",
               "echo 'initial_position = start_of_file' >> /etc/awslogs/awslogs.conf\n",
               "echo 'log_group_name = ", { "Ref": "WebSiteName" } ,"' >> /etc/awslogs/awslogs.conf\n",
-              
+
               "echo '[plugins]' > /etc/awslogs/awscli.conf\n",
               "echo 'cwslogs = cwslogs' >> /etc/awslogs/awscli.conf\n",
               "echo '[default]' >> /etc/awslogs/awscli.conf\n",
               "echo 'region = eu-west-1' >> /etc/awslogs/awscli.conf\n",
 
               "aws s3 cp s3://web-costa-de-routing/awscli.conf /etc/awslogs/awscli.conf\n",
+              "aws s3 cp s3://web-costa-de-routing/gzip.conf /etc/nginx/conf.d/gzip.conf\n",
 
               "rm -rf /usr/share/nginx/html\n",
               "ln -s /www/origin /usr/share/nginx/html\n",
 
               "sed -i -- 's/404.html;/;/g' /etc/nginx/nginx.conf\n",
-              
+
               "service awslogs start\n",
               "service nginx start\n",
-              
+
               "chkconfig awslogs on\n",
               "chkconfig nginx on\n",
 
@@ -456,7 +457,7 @@
           "CidrIp": "0.0.0.0/0"
         }, {
           "IpProtocol": "tcp",
-          "FromPort": "80", 
+          "FromPort": "80",
           "ToPort": "80",
           "CidrIp": "0.0.0.0/0"
         }]
