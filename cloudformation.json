@@ -9,6 +9,16 @@
       "Type": "String",
       "ConstraintDescription": "must match the name of the initial S3 bucket to deploy."
     },
+    "GitOrgRepo": {
+      "Description": "The Git Organization/Repository, eg 'costacruise/web-costa-de'",
+      "Type": "String",
+      "ConstraintDescription": "must match the name of the Git Org followed by forward-slash and Git Repo."
+    },
+    "CircleAPIToken": {
+      "Description": "The CircleCI API Token for this CircleCI Project",
+      "Type": "String",
+      "ConstraintDescription": "must be pre-configured in CircleCI project settings."
+    },
     "KeyName": {
       "Description": "The EC2 Key Pair to allow SSH access to the instances",
       "Type": "AWS::EC2::KeyPair::KeyName",
@@ -317,6 +327,7 @@
               "yum": {
                 "awslogs" : [],
                 "aws-cli-plugin-cloudwatch-logs": [],
+                "jq": [],
                 "nginx": []
               }
             }
@@ -369,10 +380,10 @@
               "echo '[default]' > ~/.aws/credentials\n",
               "echo 'aws_access_key_id=", { "Ref": "AWSAccessKeyId" },"' >> ~/.aws/credentials\n",
               "echo 'aws_secret_access_key=", { "Ref": "AWSSecretAccessKeyId" },"' >> ~/.aws/credentials\n",
-
+              "export BUILD=$(curl -sL 'https://circleci.com/api/v1/project/",{ "Ref" :"GitOrgRepo" },"/tree/master?circle-token=",{ "Ref": "CircleAPIToken" },"&filter=successful&limit=1' -H 'accept: application/json' | jq '.[0].build_num')\n",
               "aws s3 sync s3://", {
                 "Ref": "WebSiteName"
-              }, "/ /www/origin --delete\n",
+              }, "/$BUILD/ /www/origin --delete\n",
 
               "echo '[general]' > /etc/awslogs/awslogs.conf\n",
               "echo 'state_file = /etc/awslogs/agent-state' >> /etc/awslogs/awslogs.conf\n",
