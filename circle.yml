@@ -10,4 +10,4 @@ deployment:
   production:
     branch: 99590928-use-correct-bucket
     commands:
-      - aws s3 sync config s3://web-costa-de-routing/ --delete 
+      - aws s3 sync config s3://web-costa-de-nginx/ --delete 
