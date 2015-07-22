@@ -8,6 +8,6 @@ test:
 
 deployment:
   production:
-    branch: 99590928-use-correct-bucket
+    branch: master 
     commands:
       - aws s3 sync config s3://web-costa-de-nginx/ --delete 
