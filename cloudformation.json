@@ -9,6 +9,11 @@
       "Type": "String",
       "ConstraintDescription": "must match the name of the initial S3 bucket to deploy."
     },
+    "S3Bucket": {
+      "Description": "The s3 bucket from which to obtain nginx configuration",
+      "Type": "String",
+      "ConstraintDescription": "must match the name of the S3 bucket containing configuration."
+    },
     "GitOrgRepo": {
       "Description": "The Git Organization/Repository, eg 'costacruise/web-costa-de'",
       "Type": "String",
@@ -407,11 +412,11 @@
               "echo '[default]' >> /etc/awslogs/awscli.conf\n",
               "echo 'region = eu-west-1' >> /etc/awslogs/awscli.conf\n",
 
-              "aws s3 cp s3://web-costa-de-routing/awscli.conf /etc/awslogs/awscli.conf\n",
+              "aws s3 cp s3://", { "Ref": "S3Bucket" } ,"/awscli.conf /etc/awslogs/awscli.conf\n",
 
-              "aws s3 cp s3://web-costa-de-routing/etc/nginx/conf.d/gzip.conf /etc/nginx/conf.d/gzip.conf\n",
-              "aws s3 cp s3://web-costa-de-routing/etc/nginx/static-cache.conf /etc/nginx/static-cache.conf\n",
-              "aws s3 cp s3://web-costa-de-routing/etc/nginx/nginx.conf /etc/nginx/nginx.conf\n",
+              "aws s3 cp s3://", { "Ref": "S3Bucket" } ,"/etc/nginx/conf.d/gzip.conf /etc/nginx/conf.d/gzip.conf\n",
+              "aws s3 cp s3://", { "Ref": "S3Bucket" } ,"/etc/nginx/static-cache.conf /etc/nginx/static-cache.conf\n",
+              "aws s3 cp s3://", { "Ref": "S3Bucket" } ,"/etc/nginx/nginx.conf /etc/nginx/nginx.conf\n",
 
               "rm -rf /usr/share/nginx/html\n",
               "ln -s /www/origin /usr/share/nginx/html\n",
